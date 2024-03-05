@@ -1,9 +1,9 @@
-// const express = require("express");
+const express = require("express");
 // // const mysql = require("mysql2");
 // // const jwt = require("jsonwebtoken");
 // // const bcrypt = require("bcrypt");
-// const bodyParser = require("body-parser");
-// const app = express();
+const bodyParser = require("body-parser");
+const app = express();
 
 // const cors = require("cors");
 // app.use(cors());
@@ -15,7 +15,8 @@
  
 // app.use(bodyParser.json());
 
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
+
 const {router, bcrypt, db ,authenticateToken ,jsonwebtoken} =  require("./importModule");
 
 router.post("/Employees/register", async (req, res) => {
@@ -24,6 +25,9 @@ router.post("/Employees/register", async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(Password, 10);
+   
+    // Log the parameters to the console for debugging
+    console.log("Register Parameters:", req.body);
 
     const inserEmployeesQuery =
       "INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Password, Phone, DepartmentID, PositionID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -42,6 +46,10 @@ router.post("/Employees/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { Email, Password} = req.body;
+
+    // Log the parameters to the console for debugging
+    console.log("Login Parameters:", req.body);
+    
     const getUserQuery = "SELECT * FROM Employees WHERE Email = ? AND Password = ?";
     const [rows] = await db.promise().execute(getUserQuery, [Email, Password]);
     if (rows.length === 0) {
