@@ -106,7 +106,7 @@ router.get('/Employees/:id',authenticateToken, (req, res) => {
         return res.status(400).send({error: true, message :'Please provide EmployeeID'});
     }
     try{
-        db.query('SELECT * FROM Employees WHERE EmployeeID = ?', EmployeeID, (err, result) => {
+        db.query('SELECT EmployeeID, FirstName, LastName, Email, Phone, DepartmentID, PositionID FROM Employees WHERE EmployeeID = ?', EmployeeID, (err, result) => {
           if(err){
             console.error('error fetching items:', err);
             res.status(500).json({ message: 'Internal server error'})
@@ -126,7 +126,7 @@ router.get('/Employees/:id',authenticateToken, (req, res) => {
 router.get('/Employees', authenticateToken,(req, res) => {
 
     try {
-        db.query('SELECT * FROM Employees',(err, result) => {
+        db.query('SELECT EmployeeID, FirstName, LastName, Email, Phone, DepartmentID, PositionID FROM Employees',(err, result) => {
 
             if(err) {
                 console.error('error fetching items:', err);
