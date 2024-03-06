@@ -50,8 +50,18 @@ router.post("/login", async (req, res) => {
     // Log the parameters to the console for debugging
     console.log("Login Parameters:", req.body);
     
+    // const getUserQuery = "SELECT * FROM Employees WHERE Email = ? AND Password = ?";
+    // const [rows] = await db.promise().execute(getUserQuery, [Email, Password]);
+
     const getUserQuery = "SELECT * FROM Employees WHERE Email = ? AND Password = ?";
-    const [rows] = await db.promise().execute(getUserQuery, [Email, Password]);
+    const [rows] = await db.promise().execute(getUserQuery, [Email, Password]).catch(error => {
+      console.error("Error executing SQL query:", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    });
+
+     // Log the rows retrieved from the database for debugging
+     console.log("Rows from database:", rows);
+    
     if (rows.length === 0) {
       return res.status(401).json({ error: "Invalid username" });
     }
