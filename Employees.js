@@ -23,8 +23,8 @@ router.post("/Employees/register", async (req, res) => {
   try {
     const { EmployeeID, FirstName, LastName, Email, Password, Phone, DepartmentID, PositionID } = req.body;
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(Password, 10);
+    // // Hash the password
+    // const hashedPassword = await bcrypt.hash(Password, 10);
    
     // Log the parameters to the console for debugging
     console.log("Register Parameters:", req.body);
@@ -33,7 +33,7 @@ router.post("/Employees/register", async (req, res) => {
       "INSERT INTO Employees (EmployeeID, FirstName, LastName, Email, Password, Phone, DepartmentID, PositionID) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     await db
       .promise()
-      .execute(inserEmployeesQuery, [EmployeeID, FirstName, LastName, Email, hashedPassword, Phone, DepartmentID, PositionID]);
+      .execute(inserEmployeesQuery, [EmployeeID, FirstName, LastName, Email, Password, Phone, DepartmentID, PositionID]);
 
     res.status(201).json({ message: "Employee registered successfully" });
   } catch (error) {
