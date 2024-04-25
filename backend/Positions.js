@@ -1,4 +1,9 @@
-const {router, bcrypt, db ,authenticateToken ,jsonwebtoken} =  require("./importModule");
+const {router, bcrypt ,authenticateToken ,jsonwebtoken} =  require("./importModule");
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+const db = require('./databaseConnector/connection');
+require('dotenv').config();
 
   router.post("/Positions/register", async (req, res) => {
     try {

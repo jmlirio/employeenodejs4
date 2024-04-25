@@ -1,4 +1,9 @@
-const {router, bcrypt, db ,authenticateToken ,jsonwebtoken} =  require("./importModule");
+const {router, bcrypt ,authenticateToken ,jsonwebtoken} =  require("./importModule");
+const express = require("express");
+const bodyParser = require("body-parser");
+const app = express();
+const db = require('./databaseConnector/connection');
+require('dotenv').config();
 
 router.post("/Departments/register", async (req, res) => {
     try {
@@ -45,22 +50,25 @@ router.get('/Departments/:id',authenticateToken, (req, res) => {
 
 router.get('/Departments', authenticateToken,(req, res) => {
 
-    try {
-        db.query('SELECT * FROM Departments',(err, result) => {
+  try {
+      
+      db.query('SELECT * FROM Departments',(err, result) => {
 
-            if(err) {
-                console.error('error fetching items:', err);
-                res.status(500).json({ error: 'Internal Server Error' });
-            }else{
-                res.status(200).json({result});
-            }
-        });
+          if(err) {
+              console.error('error fetching items:', err);
+              res.status(500).json({ error: 'Internal Server Error' });
+          }else{
+              res.status(200).json({result});
+          }
+      });
 
-    } catch (error) {
-        console.error('Error loading users', error);
-        res.status(200).json({ error: 'Internal Server Error' });
-    }
+  } catch (error) {
+      console.error('Error loading users', error);
+      res.status(200).json({ error: 'Internal Server Error' });
+  }
 });
+
+
 
 
 
@@ -94,13 +102,13 @@ router.put('/Departments/:id', authenticateToken, async (req, res) => {
 
   router.delete("/Departments/:id", authenticateToken, (req, res) => {
     try {
-      const departmentID = req.params.id;
+      const DepartmentID = req.params.id;
   
-      if (!departmentID) {
+      if (!DepartmentID) {
         return res.status(400).json({ error: true, message: 'Please provide DepartmentID' });
       }
   
-      db.query('DELETE FROM Departments WHERE DepartmentID = ?', [departmentID], (err, result) => {
+      db.query('DELETE FROM Departments WHERE DepartmentID = ?', [DepartmentID], (err, result) => {
         if (err) {
           console.error('Error deleting department:', err);
           return res.status(500).json({ message: 'Internal server error' });

@@ -4,12 +4,18 @@ const express = require("express");
 // // const bcrypt = require("bcrypt");
 const bodyParser = require("body-parser");
 const app = express();
+const db = require('./databaseConnector/connection'); // Make sure to use the correct file path if it's different
+require('dotenv').config();
+
+
+
+
 
 // const cors = require("cors");
 // app.use(cors());
 // const PORT = process.env.PORT || 4438;
 
-// const secretKey = "figuron-secret-key";
+const secretKey = "figuron-secret-key";
 
  
  
@@ -17,7 +23,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
-const {router, bcrypt, db ,authenticateToken ,jsonwebtoken} =  require("./importModule");
+const {router, bcrypt, authenticateToken ,jsonwebtoken} =  require("./importModule");
 
 router.post("/Employees/register", async (req, res) => {
   try {
@@ -123,7 +129,7 @@ router.get('/Employees/:id',authenticateToken, (req, res) => {
 });
 
 
-router.get('/Employees', authenticateToken,(req, res) => {
+router.get('/Employees', authenticateToken,(_req, res) => {
 
     try {
         db.query('SELECT EmployeeID, FirstName, LastName, Email, Phone, DepartmentID, PositionID FROM Employees',(err, result) => {

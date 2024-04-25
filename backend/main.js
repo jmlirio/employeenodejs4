@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const {express} = require("./importModule");
 const app = express();
+const PORT = process.env.PORT || 3001;
 app.use(cors());
 
 
@@ -15,6 +16,6 @@ app.use('/', require('./Department'))
 app.use('/', require('./Salaries'))
 app.use('/', require('./Employees'))
 
-app.listen(process.env.PORT, () => {
-    console.log("server started")
-});
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
