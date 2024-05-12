@@ -15,6 +15,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import CloseButton from 'react-bootstrap/CloseButton';
 
+
+import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen, FaTrash, FaEdit } from 'react-icons/fa'; 
 const User = () => {
     const [users, setUsers] = useState([]);
     let user;
@@ -89,7 +91,7 @@ const User = () => {
         formData.append('Email', Email) 
         formData.append('Password', Password)
         formData.append('DepartmentID', DepartmentID)
-        formData.append('Position', PositionID)
+        formData.append('PositionID', PositionID)
 
             await axios.post('http://localhost:3001/Employees/register', {EmployeeID, FirstName, LastName, Email, Password, Phone, DepartmentID, PositionID}).then(({data})=>{
                 Swal.fire({
@@ -144,15 +146,24 @@ const User = () => {
         })
     }
 
+
+    
     return (
         <>
 
         
-            <div className="container" style={{ maxWidth: '80%' , marginTop: '250px'}}>
+            <div className="container" style={{ maxWidth: '80%' , marginTop: '25px', marginRight: '50px'}}>
                 
-                <div className='col-12'>
-                    <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow} >Add EMP</Button>
+
+            <div className="total-users-box" style={{ marginBottom: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
+                Total Employees: {users.length}
                 </div>
+
+                <div className='col-12'>
+                    <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow} >Add Employee</Button>
+                </div>
+
+                
                 
                 <Table striped bordered hover style={{fontSize: 'small'}}> 
                     <thead>
@@ -162,8 +173,8 @@ const User = () => {
                         <th>LastName</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>DepartmentID</th>
-                        <th>PositionID</th>
+                        <th>Department ID</th>
+                        <th>Position ID</th>
                         <th>Action</th>
                         </tr>
                     </thead>
@@ -180,15 +191,18 @@ const User = () => {
                                     <td>{row.Phone}</td>
                                     <td>{row.DepartmentID}</td>
                                     <td>{row.PositionID}</td>
+                                    
                                     <td>
-                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.EmployeeID)}>
-                                            Delete
+                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.EmployeeID)}><FaTrash />
+                                            
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.EmployeeID)} style={{ marginLeft: '20px'}}>
-                                            Update
+                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.EmployeeID)} style={{ marginLeft: '20px'}}><FaEdit/>
+                                            
                                         </Button>
                                     </td>
+                                    
                                 </tr>
+                                
                             ))
                         )
                     }

@@ -10,7 +10,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Nav from 'react-bootstrap/Nav';
-
+import {Link} from 'react-router-dom';
 
 import Table from 'react-bootstrap/Table';
 
@@ -24,7 +24,8 @@ import CloseButton from 'react-bootstrap/CloseButton';
 
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen } from 'react-icons/fa'; 
+import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen, FaTrash, FaEdit, FaHome } from 'react-icons/fa'; 
+import logo from './workunity.png';
 
 const Addresses = () => {
     const [addresses, setAddresses] = useState([]);
@@ -163,55 +164,39 @@ const Addresses = () => {
 
     return (
         <>
-              {[false].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-secondary mb-3 fixed-top" >
-          <Container fluid>
-            <Navbar.Brand style={{ fontWeight: 'bold' }}>ADDRESS</Navbar.Brand>
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Offcanvas
-              id={`offcanvasNavbar-expand-${expand}`}
-              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="end"
-            >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  EMS
-                </Offcanvas.Title>
-                
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="/dashboard"><FaChartBar />Employees</Nav.Link>
-                  <Nav.Link href="/department"><FaBuilding />Departments</Nav.Link>
-                  <NavDropdown
-                    title="See more"
-                    id={`offcanvasNavbarDropdown-expand-${expand}`}
-                  >
-                    <NavDropdown.Item href="/positions"><FaUsers />Positions</NavDropdown.Item>
-                    <NavDropdown.Item href="/addresses"><FaMapMarkerAlt />
-                      Addresses
-                    </NavDropdown.Item>
-                    {/* <NavDropdown.Divider /> */}
-                    <NavDropdown.Item href="/salaries"><FaMoneyBillAlt />
-                      Salaries
-                    </NavDropdown.Item>
-                    <NavDropdown.Item>
-                    
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-                <Navbar.Text style={{ color: 'black'}}>
-                        
-                        
-                    </Navbar.Text>
-              </Offcanvas.Body>
-            </Navbar.Offcanvas>
-          </Container>
-        </Navbar>
-      ))}
+      <div className="sidebar">
+      <img src={logo} alt="Logo" className="logo" />
+        <Nav className="flex-column">
+        <Nav.Link as={Link} to="/home">
+            <FaHome /> Home
+          </Nav.Link>
+          <Nav.Link as={Link} to="/dashboard">
+            <FaChartBar /> Employees
+          </Nav.Link>
+          <Nav.Link as={Link} to="/department">
+            <FaBuilding /> Departments
+          </Nav.Link>
+          <Nav.Link as={Link} to="/positions">
+            <FaUsers /> Positions
+          </Nav.Link>
+          <Nav.Link as={Link} to="/addresses">
+            <FaMapMarkerAlt /> Addresses
+          </Nav.Link>
+          <Nav.Link as={Link} to="/salaries">
+            <FaMoneyBillAlt /> Salaries
+          </Nav.Link>
+
+        </Nav>
         
-            <div className="container" style={{ maxWidth: '80%',  marginTop: '250px'}}>
+      </div>
+        
+        <div className="container" style={{ maxWidth: '80%' , marginTop: '25px', marginRight: '50px'}}>
                 
+            <div className="total-users-box" style={{ marginBottom: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
+                Total Addresses: {addresses.length}
+                </div>
+
+
                 <div className='col-12'>
                     <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow} >Add Address</Button>
                 </div>
@@ -219,8 +204,8 @@ const Addresses = () => {
                 <Table striped bordered hover style={{fontSize: 'small'}}>
                     <thead>
                         <tr>
-                        <th>AddressID</th>
-                        <th>EmployeeID</th>
+                        <th>Address ID</th>
+                        <th>Employee ID</th>
                         <th>AddressLine1</th>
                         <th>City</th>
                         </tr>
@@ -236,11 +221,11 @@ const Addresses = () => {
                                     <td>{row.AddressLine1}</td>
                                     <td>{row.City}</td>
                                     <td>
-                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.id)} >
-                                            Delete
+                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.id)} >  <FaTrash/>
+                                            
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}>
-                                            Update
+                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit/>
+                                            
                                         </Button>
                                     </td>
                                 </tr>

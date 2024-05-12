@@ -19,6 +19,7 @@ import Positions from './Positions';
 import Addresses from './Addresses';
 import Salaries from './Salaries';
 import Login from './Login';
+import Home from './Home';
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
                         <Routes>
                           <Route path="/" element={<Login />} />
                           <Route path="/login" element={<Login />} />
+                          <Route path="/home" element={<Home />} />
                           <Route path="/dashboard" element={<Dashboard />} />
                           <Route path="/department" element={<Department />} />
                           <Route path="/positions" element={<Positions />} />

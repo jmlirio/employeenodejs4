@@ -11,7 +11,7 @@ import Container from 'react-bootstrap/Container';
 import NavbarBrand from 'react-bootstrap/NavbarBrand';
 import Nav from 'react-bootstrap/Nav';
 
-
+import {Link} from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
 
 import Swal from 'sweetalert2'
@@ -24,7 +24,8 @@ import CloseButton from 'react-bootstrap/CloseButton';
 
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen } from 'react-icons/fa'; 
+import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen, FaTrash, FaEdit, FaHome } from 'react-icons/fa'; 
+import logo from './workunity.png';
 const Department = () => {
     const [departments, setDepartments] = useState([]);
     let department;
@@ -44,6 +45,8 @@ const Department = () => {
         accept: 'application/json',
         Authorization: token
     }
+
+    
 
 
     /* Autoloads the data */
@@ -134,7 +137,7 @@ const Department = () => {
             return;
         }
 
-        await axios.delete(`http://localhost:3001/Departments/${id}`, {headers: headers}).then(({data})=>{
+        await axios.delete(`http://localhost:3001/Departments/${id}`, {headers: headers}).then(({})=>{
             Swal.fire({
                 icon:"success",
                 text:"Succesfully Deleted"
@@ -149,57 +152,46 @@ const Department = () => {
         })
     }
 
+
+
+    
     return (
         <>
-              {[false].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-secondary mb-3 fixed-top" >
-          <Container fluid>
-            <Navbar.Brand style={{ fontWeight: 'bold' }}>DEPARTMENTS</Navbar.Brand>
-            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Offcanvas
-              id={`offcanvasNavbar-expand-${expand}`}
-              aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-              placement="end"
-            >
-              <Offcanvas.Header closeButton>
-                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  EMS
-                </Offcanvas.Title>
-                
-              </Offcanvas.Header>
-              <Offcanvas.Body>
-                <Nav className="justify-content-end flex-grow-1 pe-3">
-                  <Nav.Link href="/dashboard"><FaChartBar />Employees</Nav.Link>
-                  <Nav.Link href="/department"><FaBuilding />Departments</Nav.Link>
-                  <NavDropdown
-                    title="See more"
-                    id={`offcanvasNavbarDropdown-expand-${expand}`}
-                  >
-                    <NavDropdown.Item href="/positions"><FaUsers />Positions</NavDropdown.Item>
-                    <NavDropdown.Item href="/addresses"><FaMapMarkerAlt />
-                      Addresses
-                    </NavDropdown.Item>
-                    {/* <NavDropdown.Divider /> */}
-                    <NavDropdown.Item href="/salaries"><FaMoneyBillAlt />
-                      Salaries
-                    </NavDropdown.Item>
-                    <NavDropdown.Item>
-                    
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-                <Navbar.Text style={{ color: 'black'}}>
-                        
-                        
-                    </Navbar.Text>
-              </Offcanvas.Body>
-            </Navbar.Offcanvas>
-          </Container>
-        </Navbar>
-      ))}
+      <div className="sidebar">
+      <img src={logo} alt="Logo" className="logo" />
+        <Nav className="flex-column">
+        <Nav.Link as={Link} to="/home">
+            <FaHome /> Home
+          </Nav.Link>
+          <Nav.Link as={Link} to="/dashboard">
+            <FaChartBar /> Employees
+          </Nav.Link>
+          <Nav.Link as={Link} to="/department">
+            <FaBuilding /> Departments
+          </Nav.Link>
+          <Nav.Link as={Link} to="/positions">
+            <FaUsers /> Positions
+          </Nav.Link>
+          <Nav.Link as={Link} to="/addresses">
+            <FaMapMarkerAlt /> Addresses
+          </Nav.Link>
+          <Nav.Link as={Link} to="/salaries">
+            <FaMoneyBillAlt /> Salaries
+          </Nav.Link>
+
+        </Nav>
         
-            <div className="container" style={{ maxWidth: '80%',  marginTop: '250px'}}>
+      </div>
+        
+        <div className="container" style={{ maxWidth: '80%' , marginTop: '25px', marginRight: '50px'}}>
                 
+
+            <div className="total-users-box" style={{ marginBottom: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
+                Total Departments: {departments.length}
+                </div>
+
+
+
                 <div className='col-12'>
                     <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow} >Add Department</Button>
                 </div>
@@ -207,8 +199,8 @@ const Department = () => {
                 <Table striped bordered hover style={{fontSize: 'small'}}>
                     <thead>
                         <tr>
-                        <th>DepartmentID</th>
-                        <th>DepartmentName</th>
+                        <th>Department ID</th>
+                        <th>Department Name</th>
 
                         </tr>
                     </thead>
@@ -222,11 +214,11 @@ const Department = () => {
                                     <td>{row.DepartmentName}</td>
 
                                     <td>
-                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.id)} >
-                                            Delete
-                                        </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}>
-                                            Update
+                                    <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.DepartmentID)}><FaTrash />
+                                            
+                                            </Button>
+                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit />
+                                            
                                         </Button>
                                     </td>
                                 </tr>

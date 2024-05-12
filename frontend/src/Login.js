@@ -15,7 +15,7 @@ const Login = () => {
             });
             // const token = response.data.token;
             localStorage.setItem('token', JSON.stringify(response));
-            navigate('/dashboard');
+            navigate('/home');
         } catch (error) {
             // Handle login error
         }

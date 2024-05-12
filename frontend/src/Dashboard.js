@@ -26,13 +26,13 @@ import NavbarText from 'react-bootstrap/esm/NavbarText';
 
 import UserCircle from './UserCircle';
 
-import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen } from 'react-icons/fa'; 
-
+import { FaChartBar, FaUsers, FaBuilding, FaMapMarkerAlt, FaMoneyBillAlt, FaDoorOpen, FaTrash, FaEdit, FaHome } from 'react-icons/fa'; 
+import logo from './workunity.png';
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
     const [currentTime, setCurrentTime] = useState(new Date()); // State to hold current time
-   
+    
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -74,67 +74,34 @@ const Dashboard = () => {
 
     return (
         <>
-          {[false].map((expand) => (
-            <Navbar key={expand} expand={expand} className="bg-secondary mb-3 fixed-top">
-              <Container fluid>
-                <Navbar.Brand style={{ fontWeight: 'bold' }}>Employee Management System</Navbar.Brand>
-                <span style={{ marginLeft: '990px' }}>{currentTime.toLocaleTimeString()}</span>
-                
-                <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-      
-                <Navbar.Offcanvas
-                  id={`offcanvasNavbar-expand-${expand}`}
-                  aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}
-                  placement="end"
-                >
-                  <Offcanvas.Header closeButton>
-                    <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                      EMS{' '}
-                      <span style={{ marginLeft: '95px', color: '#000000' }}>
-                        Welcome, {user ? user.EmployeeID : 'id'} {user ? user.FirstName : 'name'}
-                      </span>
-                    </Offcanvas.Title>
-                  </Offcanvas.Header>
-                  <Offcanvas.Body>
-                    <Nav className="justify-content-end flex-grow-1 pe-3">
-                      <Nav.Link href="/dashboard">
-                        <FaChartBar /> Employees
-                      </Nav.Link>
-                      <Nav.Link href="/department">
-                        <FaBuilding /> Departments
-                      </Nav.Link>
-                      <NavDropdown
-                        title={
-                          <>
-                             See more
-                          </>
-                        }
-                        id={`offcanvasNavbarDropdown-expand-${expand}`}
-                      >
-                        <NavDropdown.Item href="/positions">
-                          <FaUsers /> Positions
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/addresses">
-                          <FaMapMarkerAlt /> Addresses
-                        </NavDropdown.Item>
-                        <NavDropdown.Item href="/salaries">
-                          <FaMoneyBillAlt /> Salaries
-                        </NavDropdown.Item>
-                         
-                      <NavbarText>
-                            <a href="#" onClick={handleLogout} style={{ marginLeft: '20px', textDecoration: 'none', color: 'inherit' }}>
-                                <FaDoorOpen /> Logout
-                            </a>
-                    </NavbarText>
-                      </NavDropdown>
-                      
-
-                    </Nav>
-                  </Offcanvas.Body>
-                </Navbar.Offcanvas>
-              </Container>
-            </Navbar>
-          ))}
+      <div className="sidebar">
+      <img src={logo} alt="Logo" className="logo" />
+        <Nav className="flex-column">
+        <Nav.Link as={Link} to="/home">
+            <FaHome /> Home
+          </Nav.Link>
+          <Nav.Link as={Link} to="/dashboard">
+            <FaChartBar /> Employees
+          </Nav.Link>
+          <Nav.Link as={Link} to="/department">
+            <FaBuilding /> Departments
+          </Nav.Link>
+          <Nav.Link as={Link} to="/positions">
+            <FaUsers /> Positions
+          </Nav.Link>
+          <Nav.Link as={Link} to="/addresses">
+            <FaMapMarkerAlt /> Addresses
+          </Nav.Link>
+          <Nav.Link as={Link} to="/salaries">
+            <FaMoneyBillAlt /> Salaries
+          </Nav.Link>
+          <Nav.Link onClick={handleLogout} style={{ marginTop: '45vh' }}>
+            <FaDoorOpen /> Logout
+          </Nav.Link>
+        </Nav>
+        
+      </div>
+       
                        
           <UserCircle user={user} />
       
