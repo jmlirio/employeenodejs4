@@ -80,11 +80,17 @@ const Salaries = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [showupdate, setShowupdate] = useState(false);
+    const handleShowupdate = () => setShowupdate(true);
+    const handleCloseupdate = () => setShowupdate(false);
 
     const [SalaryID, setSalaryID] = useState("")
     const [EmployeeID, setEmployeeID] = useState("")
     const [SalaryAmount, setSalaryAmount] = useState("")
     const [validationError, setValidationError] = useState({})
+
+    const [id,setid] = useState({})
+
 
     const createProduct = async (e) => {
 
@@ -96,7 +102,7 @@ const Salaries = () => {
 
         const formData = new FormData()
         formData.append('SalaryID', SalaryID)
-        formData.append('EmployeeId', EmployeeID) 
+        formData.append('EmployeeID', EmployeeID) 
         formData.append('SalaryAmount', SalaryAmount) 
 
             await axios.post('http://localhost:3001/Salaries/register', {SalaryID, EmployeeID, SalaryAmount}).then(({data})=>{
@@ -214,8 +220,15 @@ const Salaries = () => {
                                         <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.SalaryID)} ><FaTrash/>
                                             
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit/>
+                                        <Button className='btn btn-secondary btn-sm' onClick={() => {
+                                            handleShowupdate() 
+                                            setid(row)
+                                        }
                                             
+                                  
+                                        
+                                        } style={{ marginLeft: '20px' }}>
+                                            <FaEdit />
                                         </Button>
                                     </td>
                                 </tr>
@@ -227,6 +240,66 @@ const Salaries = () => {
                 </Table>    
 
             </div>   
+
+            <Modal show={showupdate} onHide={handleCloseupdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Salaries</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form onSubmit={      
+    async (e) => {
+
+//         e.preventDefault();
+// console.log({
+//     SalaryID: SalaryID,
+//     EmployeeID: EmployeeID,
+//     SalaryAmount: SalaryAmount,
+
+// })
+        try {
+            const updateSalaries = await axios.put(`http://localhost:3001/Salaries/${id.SalaryID}`, {
+                SalaryID: SalaryID,
+                EmployeeID: EmployeeID,
+                SalaryAmount: SalaryAmount,
+
+            }, { headers: headers });
+            console.log(updateSalaries);
+            // handleShow(); // Show the modal form
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}>
+
+                    
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="SalaryID">
+                                    <Form.Label>SalaryID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.SalaryID} onChange={(event) => { setSalaryID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="EmployeeID">
+                                    <Form.Label>EmployeeID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.EmployeeID} onChange={(event) => { setEmployeeID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="SalaryAmount">
+                                    <Form.Label>SalaryAmount</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.SalaryAmount} onChange={(event) => { setSalaryAmount(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
            
             <Modal show={show} onHide={handleClose}>
 

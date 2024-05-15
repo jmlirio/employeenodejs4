@@ -60,6 +60,10 @@ const User = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [showupdate, setShowupdate] = useState(false);
+    const handleShowupdate = () => setShowupdate(true);
+    const handleCloseupdate = () => setShowupdate(false);
+
 
     const [EmployeeID, setEmployeeID] = useState("")
     const [FirstName, setFirstName] = useState("")
@@ -70,6 +74,10 @@ const User = () => {
     const [DepartmentID, setDepartmentID] = useState("")
     const [PositionID, setPositionID] = useState("")
     const [validationError, setValidationError] = useState({})
+
+    const [id,setid] = useState({})
+
+    
 
     const createProduct = async (e) => {
 
@@ -150,39 +158,29 @@ const User = () => {
     
     return (
         <>
-
-        
-            <div className="container" style={{ maxWidth: '80%' , marginTop: '25px', marginRight: '50px'}}>
-                
-
-            <div className="total-users-box" style={{ marginBottom: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
-                Total Employees: {users.length}
+            <div className="container" style={{ maxWidth: '80%', marginTop: '25px', marginRight: '50px' }}>
+                <div className="total-users-box" style={{ marginBottom: '20px', padding: '10px', border: '1px solid black', borderRadius: '5px' }}>
+                    Total Employees: {users.length}
                 </div>
-
                 <div className='col-12'>
-                    <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow} >Add Employee</Button>
+                    <Button variant="btn btn-dark mb-2 float-end btn-sm me-2" onClick={handleShow}>Add Employee</Button>
                 </div>
-
-                
-                
-                <Table striped bordered hover style={{fontSize: 'small'}}> 
+                <Table striped bordered hover style={{ fontSize: 'small' }}>
                     <thead>
                         <tr>
-                        <th>EmployeeID</th>
-                        <th>FirstName</th>
-                        <th>LastName</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Department ID</th>
-                        <th>Position ID</th>
-                        <th>Action</th>
+                            <th>EmployeeID</th>
+                            <th>FirstName</th>
+                            <th>LastName</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Department ID</th>
+                            <th>Position ID</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-
                     <tbody>
-                    {
-                        users.length > 0 && (
-                            users.slice(0, 10).map((row, key)=>(
+                        {users.length > 0 && (
+                            users.slice(0, 10).map((row, key) => (
                                 <tr key={key}>
                                     <td>{row.EmployeeID}</td>
                                     <td>{row.FirstName}</td>
@@ -191,113 +189,204 @@ const User = () => {
                                     <td>{row.Phone}</td>
                                     <td>{row.DepartmentID}</td>
                                     <td>{row.PositionID}</td>
-                                    
                                     <td>
-                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.EmployeeID)}><FaTrash />
-                                            
+                                        <Button className='btn btn-dark btn-sm' onClick={() => deleteProduct(row.EmployeeID)}>
+                                            <FaTrash />
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.EmployeeID)} style={{ marginLeft: '20px'}}><FaEdit/>
+                                        <Button className='btn btn-secondary btn-sm' onClick={() => {
+                                            handleShowupdate() 
+                                            setid(row)
+                                        }
                                             
+                                  
+                                        
+                                        } style={{ marginLeft: '20px' }}>
+                                            <FaEdit />
                                         </Button>
+
+                                         
                                     </td>
-                                    
                                 </tr>
-                                
                             ))
-                        )
-                    }
+                        )}
                     </tbody>
-
-                </Table>    
-
-            </div>   
-           
-            <Modal show={show} onHide={handleClose}>
-
-        <Modal.Header closeButton>
-                <Modal.Title>Add Employee</Modal.Title>
-        </Modal.Header>
+                </Table>
+            </div>
+            <Modal show={showupdate} onHide={handleCloseupdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Employee</Modal.Title>
+                </Modal.Header>
                 <Modal.Body>
-                
-                <Form onSubmit={createProduct}>
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="EmployeeID">
-                                <Form.Label >EmployeeID</Form.Label>
-                                <Form.Control type="text" value={EmployeeID} onChange={(event)=>{setEmployeeID(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+                    <Form onSubmit={      
+                            async (e) => {
+                                            try {
+                                                const updateUser = await axios.put(`http://localhost:3001/Employees/${id.EmployeeID}`, {
+                                                    FirstName:"FirstName",
+                                                    LastName:"LastName",
+                                                    Email: "Email",
+                                                    Phone:"Phone",
+                                                    DepartmentID:1,
+                                                    PositionID: 1,
 
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="FirstName">
-                                <Form.Label>FirstName</Form.Label>
-                                <Form.Control type="text" value={FirstName} onChange={(event)=>{setFirstName(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
 
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="LastName">
-                                <Form.Label>LastName</Form.Label>
-                                <Form.Control type="text" value={LastName} onChange={(event)=>{setLastName(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
 
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="Email">
-                                <Form.Label>Email</Form.Label>
-                                <Form.Control type="text" value={Email} onChange={(event)=>{setEmail(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="Password">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control type="text" value={Password} onChange={(event)=>{setPassword(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="Phone">
-                                <Form.Label>Phone</Form.Label>
-                                <Form.Control type="text" value={Phone} onChange={(event)=>{setPhone(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="DepartmentID">
-                                <Form.Label>DepartmentID</Form.Label>
-                                <Form.Control type="text" value={DepartmentID} onChange={(event)=>{setDepartmentID(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col>
-                            <Form.Group controlId="PositionID">
-                                <Form.Label>PositionID</Form.Label>
-                                <Form.Control type="text" value={PositionID} onChange={(event)=>{setPositionID(event.target.value)}}/>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
-
-                </Form>
-                </Modal.Body> 
+                                                }, { headers: headers });
+                                                console.log(updateUser);
+                                                handleShow(); // Show the modal form
+                                            } catch (error) {
+                                                console.log(error);
+                                            }
+                                        }
+                                        }>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="EmployeeID">
+                                    <Form.Label>EmployeeID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.EmployeeID} onChange={(event) => { setEmployeeID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="FirstName">
+                                    <Form.Label>FirstName</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.FirstName} onChange={(event) => { setFirstName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="LastName">
+                                    <Form.Label>LastName</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.LastName} onChange={(event) => { setLastName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Email">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.Email} onChange={(event) => { setEmail(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Password">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.Password} onChange={(event) => { setPassword(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Phone">
+                                    <Form.Label>Phone</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.Phone} onChange={(event) => { setPhone(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="DepartmentID">
+                                    <Form.Label>DepartmentID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.DepartmentID} onChange={(event) => { setDepartmentID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="PositionID">
+                                    <Form.Label>PositionID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.PositionID} onChange={(event) => { setPositionID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
             </Modal>
-        
+
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add Employee</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={createProduct}>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="EmployeeID">
+                                    <Form.Label>EmployeeID</Form.Label>
+                                    <Form.Control type="text" value={EmployeeID} onChange={(event) => { setEmployeeID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="FirstName">
+                                    <Form.Label>FirstName</Form.Label>
+                                    <Form.Control type="text" value={FirstName} onChange={(event) => { setFirstName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="LastName">
+                                    <Form.Label>LastName</Form.Label>
+                                    <Form.Control type="text" value={LastName} onChange={(event) => { setLastName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Email">
+                                    <Form.Label>Email</Form.Label>
+                                    <Form.Control type="text" value={Email} onChange={(event) => { setEmail(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Password">
+                                    <Form.Label>Password</Form.Label>
+                                    <Form.Control type="text" value={Password} onChange={(event) => { setPassword(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="Phone">
+                                    <Form.Label>Phone</Form.Label>
+                                    <Form.Control type="text" value={Phone} onChange={(event) => { setPhone(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="DepartmentID">
+                                    <Form.Label>DepartmentID</Form.Label>
+                                    <Form.Control type="text" value={DepartmentID} onChange={(event) => { setDepartmentID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="PositionID">
+                                    <Form.Label>PositionID</Form.Label>
+                                    <Form.Control type="text" value={PositionID} onChange={(event) => { setPositionID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
+            
+
+
+           
         </>
     );
 }

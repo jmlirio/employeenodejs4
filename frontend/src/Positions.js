@@ -79,11 +79,17 @@ const Positions = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [showupdate, setShowupdate] = useState(false);
+    const handleShowupdate = () => setShowupdate(true);
+    const handleCloseupdate = () => setShowupdate(false);
 
     const [PositionID, setPositionID] = useState("")
     const [PositionName, setPositionName] = useState("")
 
     const [validationError, setValidationError] = useState({})
+
+    const [id,setid] = useState({})
+
 
     const createProduct = async (e) => {
 
@@ -218,9 +224,17 @@ const Positions = () => {
                                         <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.PositionID)} >  <FaTrash/>
                                             
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit/>
+                                        <Button className='btn btn-secondary btn-sm' onClick={() => {
+                                            handleShowupdate() 
+                                            setid(row)
+                                        }
                                             
+                                  
+                                        
+                                        } style={{ marginLeft: '20px' }}>
+                                            <FaEdit />
                                         </Button>
+                                        
                                     </td>
                                 </tr>
                             ))
@@ -231,6 +245,48 @@ const Positions = () => {
                 </Table>    
 
             </div>   
+
+            <Modal show={showupdate} onHide={handleCloseupdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Positions</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form onSubmit={      
+    async (e) => {
+        try {
+            const updatePosition = await axios.put(`http://localhost:3001/Positions/${id.PositionID}`, {
+                PositionID: PositionID,
+                PositionName: PositionName,
+            }, { headers: headers });
+            console.log(updatePosition);
+            handleShow(); // Show the modal form
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}>
+
+                    
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="PositionID">
+                                    <Form.Label>PositionID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.PositionID} onChange={(event) => { setPositionID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="PositionName">
+                                    <Form.Label>PositionName</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.PositionName} onChange={(event) => { setPositionName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
            
             <Modal show={show} onHide={handleClose}>
 

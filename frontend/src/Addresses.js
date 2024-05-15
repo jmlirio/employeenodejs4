@@ -79,6 +79,9 @@ const Addresses = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [showupdate, setShowupdate] = useState(false);
+    const handleShowupdate = () => setShowupdate(true);
+    const handleCloseupdate = () => setShowupdate(false);
 
     const [AddressID, setAddressID] = useState("")
     const [EmployeeID, setEmployeeID] = useState("")
@@ -86,6 +89,9 @@ const Addresses = () => {
     const [City, setCity] = useState("")
 
     const [validationError, setValidationError] = useState({})
+
+    const [id,setid] = useState({})
+
 
     const createProduct = async (e) => {
 
@@ -189,6 +195,76 @@ const Addresses = () => {
         </Nav>
         
       </div>
+
+
+
+
+      <Modal show={showupdate} onHide={handleCloseupdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Address</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form onSubmit={      
+    async (e) => {
+        try {
+            const updatePosition = await axios.put(`http://localhost:3001/Addresses/${id.AddressID}`, {
+                AddressID: AddressID,
+                EmployeeID: EmployeeID,
+                AddressLine1: AddressLine1,
+                City: City,
+            }, { headers: headers });
+            console.log(updatePosition);
+            handleShow(); // Show the modal form
+
+            // Reset form fields
+            setAddressID("");
+            setEmployeeID("");
+            setAddressLine1("");
+            setCity("");
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="AddressID">
+                                    <Form.Label>AddressID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.AddressID} onChange={(event) => { setAddressID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="EmployeeID">
+                                    <Form.Label>EmployeeID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.EmployeeID} onChange={(event) => { setEmployeeID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="AddressLine1">
+                                    <Form.Label>AddressLine1</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.AddressLine1} onChange={(event) => { setAddressLine1(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="City">
+                                    <Form.Label>City</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.City} onChange={(event) => { setCity(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
+
+
         
         <div className="container" style={{ maxWidth: '80%' , marginTop: '25px', marginRight: '50px'}}>
                 
@@ -221,11 +297,18 @@ const Addresses = () => {
                                     <td>{row.AddressLine1}</td>
                                     <td>{row.City}</td>
                                     <td>
-                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.id)} >  <FaTrash/>
+                                        <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.AddressID)} >  <FaTrash/>
                                             
                                         </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit/>
+                                        <Button className='btn btn-secondary btn-sm' onClick={() => {
+                                            handleShowupdate() 
+                                            setid(row)
+                                        }
                                             
+                                  
+                                        
+                                        } style={{ marginLeft: '20px' }}>
+                                            <FaEdit />
                                         </Button>
                                     </td>
                                 </tr>

@@ -80,9 +80,15 @@ const Department = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [showupdate, setShowupdate] = useState(false);
+    const handleShowupdate = () => setShowupdate(true);
+    const handleCloseupdate = () => setShowupdate(false);
 
     const [DepartmentID, setDepartmentID] = useState("")
     const [DepartmentName, setDepartmentName] = useState("")
+
+    const [id,setid] = useState({})
+
 
     const [validationError, setValidationError] = useState({})
 
@@ -216,9 +222,13 @@ const Department = () => {
                                     <td>
                                     <Button className='btn btn-dark btn-sm' onClick={()=>deleteProduct(row.DepartmentID)}><FaTrash />
                                             
-                                            </Button>
-                                        <Button className='btn btn-secondary btn-sm' onClick={()=>deleteProduct(row.id)} style={{ marginLeft: '20px'}}> <FaEdit />
-                                            
+                                        </Button>
+                                        <Button className='btn btn-secondary btn-sm' onClick={() => {
+                                            handleShowupdate() 
+                                            setid(row)
+                                        }
+                                        } style={{ marginLeft: '20px' }}>
+                                            <FaEdit />
                                         </Button>
                                     </td>
                                 </tr>
@@ -229,7 +239,49 @@ const Department = () => {
 
                 </Table>    
 
-            </div>   
+            </div>
+
+            <Modal show={showupdate} onHide={handleCloseupdate}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Department</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                <Form onSubmit={      
+    async (e) => {
+        try {
+            const updateDepartment = await axios.put(`http://localhost:3001/Departments/${id.DepartmentID}`, {
+                DepartmentID: DepartmentID,
+                DepartmentName: DepartmentName,
+            }, { headers: headers });
+            console.log(updateDepartment);
+            handleShow(); // Show the modal form
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}>
+
+                    
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="DepartmentID">
+                                    <Form.Label>DepartmentID</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.DepartmentID} onChange={(event) => { setDepartmentID(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Form.Group controlId="DepartmentName">
+                                    <Form.Label>DepartmentName</Form.Label>
+                                    <Form.Control type="text" defaultValue={id.DepartmentName} onChange={(event) => { setDepartmentName(event.target.value) }} />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Button variant='dark' className='mt-2' size='sm' block='block' type='submit'>Save</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
            
             <Modal show={show} onHide={handleClose}>
 
